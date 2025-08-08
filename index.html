@@ -36,14 +36,6 @@
         .content-area {
             padding: 24px;
         }
-        .filter-grid {
-            border: 1px solid #e5e8eb;
-            border-radius: 8px;
-            padding: 24px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 24px;
-        }
         #form-view .form-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -96,7 +88,6 @@
             border-color: #0070f3;
             box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.2);
         }
-        /* 배지 이미지 레이아웃 명시적 수정 */
         #non-level-badge-image-group label {
             display: block;
         }
@@ -273,7 +264,7 @@
         
         <form id="badge-form">
             <div class="form-section">
-                <div id="edit-only-id-display" class="form-grid" style="display: none; margin-bottom: 24px;">
+                <div id="edit-only-id-display" class="form-grid" style="margin-bottom: 24px;">
                     <div class="form-group">
                         <label>배지 ID</label>
                         <p id="display-badge-id" class="form-display-text"></p>
@@ -317,22 +308,22 @@
                      <div class="form-group">
                         <label>레벨 적용 여부<span class="optional-text">(선택)</span></label>
                         <div class="radio-group">
-                            <label><input type="radio" name="level_apply" value="N" checked onchange="toggleLevelSettings(false)"> 미적용</label>
-                            <label><input type="radio" name="level_apply" value="Y" onchange="toggleLevelSettings(true)"> 적용</label>
+                            <label><input type="radio" name="level_apply" value="N" onchange="toggleLevelSettings(false)"> 미적용</label>
+                            <label><input type="radio" name="level_apply" value="Y" checked onchange="toggleLevelSettings(true)"> 적용</label>
                         </div>
                     </div>
-                    <div id="non-level-badge-image-group" class="form-group">
+                    <div id="non-level-badge-image-group" class="form-group" style="display: none;">
                         <label for="badge-image">배지 이미지</label>
                         <input type="text" id="badge-image" placeholder="배지 이미지 URL을 입력하세요">
                     </div>
                 </div>
-                <div id="level-details-container" style="display: none;">
+                <div id="level-details-container">
                     <div style="text-align: right; margin-bottom: 16px;">
                         <button type="button" class="btn btn-secondary btn-small" onclick="applyRewardsToAllLevels()">블루 레벨 보상 일괄 적용</button>
                     </div>
                     <div class="level-group">
                         <h4>블루</h4>
-                        <div id="edit-only-level-id-blue-display" class="form-grid" style="display: none; margin-bottom: 12px;">
+                        <div id="edit-only-level-id-blue-display" class="form-grid" style="margin-bottom: 12px;">
                              <div class="form-group">
                                 <label>레벨 ID</label>
                                 <p id="display-level-id-blue" class="form-display-text"></p>
@@ -343,3 +334,353 @@
                             <input type="text" id="level-blue-image" placeholder="블루 레벨의 이미지 URL을 입력하세요">
                         </div>
                         <div class="form-group reward-label-group">
+                           <label>블루 레벨 보상</label>
+                        </div>
+                         <div id="rewards-container-blue"></div>
+                         <div style="margin-top: 8px;">
+                            <button type="button" class="btn btn-secondary" onclick="addReward('blue')">+ 블루 보상 추가</button>
+                         </div>
+                    </div>
+                    <div class="level-group">
+                        <h4>레드</h4>
+                        <div id="edit-only-level-id-red-display" class="form-grid" style="margin-bottom: 12px;">
+                             <div class="form-group">
+                                <label>레벨 ID</label>
+                                <p id="display-level-id-red" class="form-display-text"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="level-red-image">배지 이미지</label>
+                            <input type="text" id="level-red-image" placeholder="레드 레벨의 이미지 URL을 입력하세요">
+                        </div>
+                         <div class="form-group reward-label-group">
+                           <label>레드 레벨 보상</label>
+                        </div>
+                         <div id="rewards-container-red"></div>
+                         <div style="margin-top: 8px;">
+                            <button type="button" class="btn btn-secondary" onclick="addReward('red')">+ 레드 보상 추가</button>
+                         </div>
+                    </div>
+                     <div class="level-group">
+                        <h4>퍼플</h4>
+                        <div id="edit-only-level-id-purple-display" class="form-grid" style="margin-bottom: 12px;">
+                             <div class="form-group">
+                                <label>레벨 ID</label>
+                                <p id="display-level-id-purple" class="form-display-text"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="level-purple-image">배지 이미지</label>
+                            <input type="text" id="level-purple-image" placeholder="퍼플 레벨의 이미지 URL을 입력하세요">
+                        </div>
+                         <div class="form-group reward-label-group">
+                           <label>퍼플 레벨 보상</label>
+                        </div>
+                         <div id="rewards-container-purple"></div>
+                         <div style="margin-top: 8px;">
+                            <button type="button" class="btn btn-secondary" onclick="addReward('purple')">+ 퍼플 보상 추가</button>
+                         </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="global-reward-settings" class="form-section" style="display: none;">
+                 <div class="form-group">
+                    <label>보상 설정<span class="optional-text">(선택)</span></label>
+                </div>
+                <div id="rewards-container-global">
+                </div>
+                <div style="margin-top: 16px;">
+                     <button type="button" class="btn btn-secondary" onclick="addReward('global')">+ 보상 추가</button>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">저장</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    let rewardCounter = 0;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // 페이지 로드 시 요청하신 '대리' 관련 '수정' 상태로 초기화
+        initializeEditForm('BDG-DAERI-001'); 
+    });
+
+    function updateBadgeNamePreview() {
+        const verticalSelect = document.getElementById('badge-vertical');
+        const verticalText = verticalSelect.options[verticalSelect.selectedIndex].text;
+        const nameInput = document.getElementById('badge-name').value;
+        const previewEl = document.getElementById('badge-name-preview');
+
+        if (nameInput.trim() !== '') {
+            previewEl.textContent = `${verticalText} ${nameInput} 배지`;
+        } else {
+            previewEl.textContent = '';
+        }
+    }
+
+    function initializeEditForm(badgeId) {
+        document.getElementById('badge-form').reset();
+        document.querySelectorAll('[id^="rewards-container-"]').forEach(c => c.innerHTML = '');
+
+        // --- 기본 정보 설정 ---
+        document.getElementById('page-title').textContent = '배지 수정';
+        document.getElementById('display-badge-id').textContent = badgeId;
+        document.getElementById('badge-vertical').value = 'daeri';
+        document.getElementById('badge-name').value = '수행';
+        document.getElementById('badge-acquisition-method').value = '대리 수행을 통해 얻을 수 있는 특별한 배지입니다.';
+        document.getElementById('rewards-url').value = 'https://example.com/rewards/daeri';
+        document.getElementById('badge-expiry-date').innerHTML = '다다음주 월요일 14:00 <span class="optional-text">(고정 정책)</span>';
+        
+        // --- 레벨 설정 ---
+        document.querySelector('input[name="level_apply"][value="Y"]').checked = true;
+        toggleLevelSettings(true);
+        
+        document.getElementById('display-level-id-blue').textContent = `${badgeId}-L1`;
+        document.getElementById('display-level-id-red').textContent = `${badgeId}-L2`;
+        document.getElementById('display-level-id-purple').textContent = `${badgeId}-L3`;
+        document.getElementById('level-blue-image').value = 'https://example.com/daeri_blue.png';
+        document.getElementById('level-red-image').value = 'https://example.com/daeri_red.png';
+        document.getElementById('level-purple-image').value = 'https://example.com/daeri_purple.png';
+
+        // --- 블루 레벨 보상 (기능) ---
+        addReward('blue', {
+            type: 'function',
+            functions: ['수요지도', '함께 이동하기', '맞춤콜']
+        });
+
+        // --- 레드 레벨 보상 (아이템 반복) ---
+        addReward('red', {
+            type: 'item',
+            item: '프로단독배정권',
+            quantity: 1,
+            isRepeating: true,
+            cycle: 'daily',
+            time: '14:00'
+        });
+
+        // --- 퍼플 레벨 보상 (복합) ---
+        addReward('purple', {
+            type: 'item',
+            item: '프로단독배정권',
+            quantity: 2,
+            isRepeating: false
+        });
+        addReward('purple', {
+            type: 'activity_energy',
+            quantity: 5,
+            isRepeating: false
+        });
+        
+        updateBadgeNamePreview();
+    }
+    
+    function toggleLevelSettings(show) {
+        document.getElementById('level-details-container').style.display = show ? 'block' : 'none';
+        document.getElementById('global-reward-settings').style.display = show ? 'none' : 'block';
+        document.getElementById('non-level-badge-image-group').style.display = show ? 'none' : 'block';
+    }
+
+    function addReward(levelPrefix, data = {}) {
+        const rewardIndex = rewardCounter++;
+        const container = document.getElementById(`rewards-container-${levelPrefix}`);
+        const newRewardHTML = `
+            <div class="reward-entry" id="reward-entry-${levelPrefix}-${rewardIndex}">
+                <div class="entry-controls">
+                    <div class="order-controls">
+                        <span class="order-label">순서 변경</span>
+                        <button type="button" class="btn-control" title="순서 위로" onclick="moveReward(this, 'up')">▲</button>
+                        <button type="button" class="btn-control" title="순서 아래로" onclick="moveReward(this, 'down')">▼</button>
+                    </div>
+                    <button type="button" class="btn-delete" onclick="this.closest('.reward-entry').remove()">삭제</button>
+                </div>
+                <div class="form-group">
+                    <label>보상 제공 타입</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="reward_type_${levelPrefix}_${rewardIndex}" value="item" onchange="handleRewardTypeChange(this, '${levelPrefix}', ${rewardIndex})"> 아이템</label>
+                        <label><input type="radio" name="reward_type_${levelPrefix}_${rewardIndex}" value="function" onchange="handleRewardTypeChange(this, '${levelPrefix}', ${rewardIndex})"> 기능</label>
+                        <label><input type="radio" name="reward_type_${levelPrefix}_${rewardIndex}" value="activity_energy" onchange="handleRewardTypeChange(this, '${levelPrefix}', ${rewardIndex})"> 활동 에너지</label>
+                    </div>
+                </div>
+                <div class="sub-options">
+                    <div id="item-options-${levelPrefix}-${rewardIndex}" style="display:none;">
+                        <div class="form-group">
+                            <label>아이템 선택</label>
+                            <select>
+                                <option value="단독배정권">단독배정권</option>
+                                <option value="프로단독배정권">프로단독배정권</option>
+                                <option value="서포트모드">서포트모드</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="function-options-${levelPrefix}-${rewardIndex}" style="display:none;"></div>
+                    <div id="quantity-options-${levelPrefix}-${rewardIndex}" style="display:none;">
+                         <div class="form-group">
+                            <label>제공 수량</label>
+                            <div class="payout-time-group">
+                                <input type="number" min="1" max="10" value="1" style="width: 80px;">
+                                <label>개</label>
+                            </div>
+                        </div>
+                        <div class="form-group repetition-group">
+                            <label>반복 여부</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="repeat_${levelPrefix}_${rewardIndex}" value="N" checked onchange="handleCycleChange(this, '${levelPrefix}', ${rewardIndex})"> 1회성</label>
+                                <label><input type="radio" name="repeat_${levelPrefix}_${rewardIndex}" value="Y" onchange="handleCycleChange(this, '${levelPrefix}', ${rewardIndex})"> 반복</label>
+                            </div>
+                        </div>
+                        <div id="cycle-options-${levelPrefix}-${rewardIndex}" class="form-group" style="display:none;">
+                            <label>반복 주기</label>
+                             <select onchange="handleCycleDetailChange(this, '${levelPrefix}', ${rewardIndex})">
+                                <option value="daily">일</option>
+                                <option value="weekly">주</option>
+                                <option value="monthly">월</option>
+                            </select>
+                             <div id="cycle-details-${levelPrefix}-${rewardIndex}" class="sub-options" style="margin-top:10px;">
+                                <div id="daily-payout-${levelPrefix}-${rewardIndex}" class="payout-time-group">
+                                    <label>지급 시간</label><input type="time" value="14:00">
+                                </div>
+                                <div id="weekly-payout-${levelPrefix}-${rewardIndex}" class="payout-time-group" style="display:none;">
+                                    <select><option>월</option><option>화</option><option>수</option><option>목</option><option>금</option><option>토</option><option>일</option></select>
+                                    <label>요일</label><input type="time">
+                                </div>
+                                <div id="monthly-payout-${levelPrefix}-${rewardIndex}" class="payout-time-group" style="display:none;">
+                                     <input type="number" min="1" max="31" style="width: 80px;"><label>일</label><input type="time">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        container.insertAdjacentHTML('beforeend', newRewardHTML);
+        
+        // --- 데이터 채우기 ---
+        const newEntry = document.getElementById(`reward-entry-${levelPrefix}-${rewardIndex}`);
+        updateRewardOptionsForVertical(newEntry);
+        
+        if(data.type){
+            const typeRadio = newEntry.querySelector(`input[type="radio"][value="${data.type}"]`);
+            if(typeRadio) {
+                typeRadio.checked = true;
+                handleRewardTypeChange(typeRadio, levelPrefix, rewardIndex);
+            }
+            if(data.functions){
+                newEntry.querySelectorAll(`#function-options-${levelPrefix}-${rewardIndex} input[type="checkbox"]`).forEach(cb => {
+                    if(data.functions.includes(cb.parentElement.textContent.trim())){
+                        cb.checked = true;
+                    }
+                });
+            }
+            if(data.item){
+                 newEntry.querySelector(`#item-options-${levelPrefix}-${rewardIndex} select`).value = data.item;
+            }
+            if(data.quantity){
+                 newEntry.querySelector(`#quantity-options-${levelPrefix}-${rewardIndex} input[type="number"]`).value = data.quantity;
+            }
+            if(data.isRepeating !== undefined){
+                const repeatRadio = newEntry.querySelector(`input[name="repeat_${levelPrefix}_${rewardIndex}"][value="${data.isRepeating ? 'Y' : 'N'}"]`);
+                if(repeatRadio){
+                    repeatRadio.checked = true;
+                    handleCycleChange(repeatRadio, levelPrefix, rewardIndex);
+                }
+            }
+            if(data.isRepeating && data.cycle){
+                const cycleSelect = newEntry.querySelector(`#cycle-options-${levelPrefix}-${rewardIndex} select`);
+                cycleSelect.value = data.cycle;
+                handleCycleDetailChange(cycleSelect, levelPrefix, rewardIndex);
+                if(data.time){
+                    newEntry.querySelector(`#${data.cycle}-payout-${levelPrefix}-${rewardIndex} input[type="time"]`).value = data.time;
+                }
+            }
+        }
+    }
+
+    function handleRewardTypeChange(radio, levelPrefix, rewardIndex) {
+        const quantityDiv = document.getElementById(`quantity-options-${levelPrefix}-${rewardIndex}`);
+        const itemDiv = document.getElementById(`item-options-${levelPrefix}-${rewardIndex}`);
+        const functionDiv = document.getElementById(`function-options-${levelPrefix}-${rewardIndex}`);
+        
+        quantityDiv.style.display = 'none';
+        itemDiv.style.display = 'none';
+        functionDiv.style.display = 'none';
+        
+        if (radio.value === 'activity_energy') {
+            quantityDiv.style.display = 'grid';
+        } else if (radio.value === 'item') {
+            itemDiv.style.display = 'block';
+            quantityDiv.style.display = 'grid';
+        } else if (radio.value === 'function') {
+            functionDiv.style.display = 'block';
+        }
+    }
+    
+    function handleVerticalChange() {
+        updateBadgeNamePreview();
+        document.querySelectorAll('.reward-entry').forEach(entry => {
+            updateRewardOptionsForVertical(entry);
+        });
+    }
+    
+    function updateRewardOptionsForVertical(rewardEntry) {
+        const functionOptionsDiv = rewardEntry.querySelector('[id^="function-options-"]');
+        
+        const functionHTML = `<div class="form-group"><label>기능 선택</label><div class="checkbox-group">
+            <label><input type="checkbox"> 수요지도</label>
+            <label><input type="checkbox"> 함께 이동하기</label>
+            <label><input type="checkbox"> 맞춤콜</label>
+        </div></div>`;
+        functionOptionsDiv.innerHTML = functionHTML;
+    }
+
+    function handleCycleChange(radio, levelPrefix, rewardIndex) {
+        const cycleDiv = document.getElementById(`cycle-options-${levelPrefix}-${rewardIndex}`);
+        cycleDiv.style.display = radio.value === 'Y' ? 'block' : 'none';
+        if (radio.value === 'Y') {
+            const select = cycleDiv.querySelector('select');
+            handleCycleDetailChange(select, levelPrefix, rewardIndex);
+        }
+    }
+
+    function handleCycleDetailChange(select, levelPrefix, rewardIndex) {
+        const detailsDiv = document.getElementById(`cycle-details-${levelPrefix}-${rewardIndex}`);
+        if(!detailsDiv) return;
+
+        detailsDiv.style.display = 'block';
+        const allPayouts = detailsDiv.querySelectorAll('.payout-time-group');
+        allPayouts.forEach(p => p.style.display = 'none');
+
+        const selectedPayout = document.getElementById(`${select.value}-payout-${levelPrefix}-${rewardIndex}`);
+        if(selectedPayout) {
+            selectedPayout.style.display = 'flex';
+        }
+    }
+
+    function moveReward(button, direction) {
+        const entry = button.closest('.reward-entry');
+        if (direction === 'up') {
+            const prevSibling = entry.previousElementSibling;
+            if (prevSibling) {
+                entry.parentElement.insertBefore(entry, prevSibling);
+            }
+        } else if (direction === 'down') {
+            const nextSibling = entry.nextElementSibling;
+            if (nextSibling) {
+                entry.parentElement.insertBefore(nextSibling, entry);
+            }
+        }
+    }
+
+    function applyRewardsToAllLevels() {
+        if (!confirm("블루 레벨의 보상을 레드, 퍼플 레벨에 복사하시겠습니까?\n기존에 입력된 레드, 퍼플 레벨의 보상은 모두 삭제됩니다.")) {
+            return;
+        }
+        alert("블루 레벨의 보상이 레드, 퍼플 레벨에 복사되었습니다.");
+    }
+</script>
+
+</body>
+</html>
